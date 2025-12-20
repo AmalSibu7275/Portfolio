@@ -127,7 +127,7 @@ body{
     font-weight: 600;
     opacity: 0;
     animation: slideTop 1s ease forwards;
-    animation-delay: 0s;
+    animation-delay: 2s;
     box-shadow: 0 0 5px #0ef,
     0 0 25px #0ef;
 }
@@ -816,4 +816,225 @@ svg{
     .about-project p {
         font-size: 16px; 
     }
+}
+
+/* MOBILE + RESPONSIVE FIXES */
+
+/* Stop horizontal overflow */
+html, body { overflow-x: hidden; }
+
+/* global section flex breaks grids (about/contact). Override it. */
+section { display: block; }
+
+/* Restore intended layouts */
+.home { display: flex; }      /* home is meant to be flex */
+.about { display: grid; }     /* about is meant to be grid */
+.contact { display: grid; }   /* contact is meant to be grid */
+
+/* Make big paddings responsive */
+.header { padding: 18px 6%; }
+.home   { padding: 110px 6% 40px; }
+.container { padding: 40px 6%; }
+
+/* Remove fixed spacing that causes overflow */
+.navbar { display: flex; flex-wrap: wrap; gap: 12px; }
+.navbar a { margin-left: 0; font-size: 18px; }
+
+/* The BIGGEST overflow culprit: skills containers */
+.container1{
+  width: min(600px, 100%);
+  height: auto;
+  padding: 40px 24px;
+  margin-left: 0;           /* kills the 120px push */
+  margin-top: 10px;
+}
+
+/* Contact form inputs should not overflow */
+.contact-form form input,
+.contact-form form textarea{
+  width: 100%;
+}
+
+/* Fix a typo that breaks positioning on some browsers */
+.top { right: 2.1rem; }      /* your code had: right: 2,1rem; */
+
+/* =========================
+   Breakpoints
+========================= */
+@media (max-width: 768px){
+
+  /* Header stacks so navbar doesn’t overflow */
+  .header{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+  }
+
+  .navbar a{
+    font-size: 16px;
+  }
+
+  /* Home text scales down */
+  .home{
+    padding: 110px 16px 40px;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .home-content h1{ font-size: 34px; }
+  .home-content h3{ font-size: 18px; }
+  .home-content h3 span{ font-size: 26px; }
+  .home-content p{ font-size: 16px; }
+
+  /* About -> single column */
+  .about{
+    grid-template-columns: 1fr;
+    padding: 50px 16px;
+  }
+  .about-text h2{ font-size: 38px; }
+  .about-text h4{ font-size: 20px; }
+  .about-text p{ font-size: 16px; }
+
+  /* Projects container smaller padding */
+  .container{ padding: 30px 16px; }
+  .sub-title{ font-size: 38px; padding-bottom: 30px; }
+
+  /* Skills: stack nicely */
+  .container1{
+    width: 100%;
+    padding: 30px 16px;
+  }
+
+  /* Contact -> single column */
+  .contact{
+    grid-template-columns: 1fr;
+    padding: 50px 16px;
+    gap: 2rem;
+  }
+  .contact-text h2{ font-size: 44px; text-align: left; }
+}
+
+@media (max-width: 480px){
+  .sub-title{ font-size: 32px; }
+  .navbar{ gap: 10px; }
+}
+/* =========================
+   Professional Skills (Radial) Fix
+   (works even with your duplicated .radial-container in HTML)
+========================= */
+
+/* If a radial-container contains another radial-container, kill the extra wrapper effect */
+.radial-container .radial-container{
+  display: contents;  /* makes nested wrapper not affect layout */
+}
+
+/* Better responsive grid-like wrapping */
+.radial-container{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* Make each radial card shrink on small screens */
+.radial-bars{
+  width: clamp(140px, 42vw, 200px);
+  height: clamp(170px, 48vw, 220px);
+  margin: 10px 0;
+}
+
+/* Keep SVG perfectly centered/scaled */
+.radial-svg,
+.radial-bars svg{
+  width: 100%;
+  height: 100%;
+}
+
+/* Text stays readable and doesn’t overlap */
+.percentage{
+  font-size: clamp(14px, 3.8vw, 17px);
+}
+
+.text{
+  font-size: clamp(12px, 3.5vw, 16px);
+  line-height: 1.2;
+  min-height: 0;
+  margin-top: 8px;
+}
+
+/* Extra small phones: 2 per row nicely */
+@media (max-width: 480px){
+  .radial-container{ gap: 12px; }
+  .radial-bars{ width: 45vw; height: 55vw; }
+}
+/* =========================
+   Skills alignment (NO HTML changes)
+   Put Technical + Professional side-by-side + centered
+========================= */
+
+/* Make sections flex again (so the two .container1 can sit next to each other) */
+section{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* centers the whole skills block */
+  align-items: flex-start;
+  gap: 50px;                 /* space between technical + professional */
+}
+
+/* But DON'T break your grid sections */
+.home{ display: flex; }      /* keep home as flex */
+.about{ display: grid; }     /* keep about as grid */
+.contact{ display: grid; }   /* keep contact as grid */
+
+/* Clean skills boxes so they don't drift left */
+.container1{
+  margin: 0;                 /* removes the old margin-left:120px */
+  width: min(600px, 100%);   /* responsive, but still wide on desktop */
+  height: auto;              /* remove fixed height */
+}
+
+/* Make sure Professional Skills circles are centered inside its box */
+.radial-container{
+  justify-content: center;
+}
+
+/* On smaller screens: stack neatly */
+@media (max-width: 900px){
+  section{
+    gap: 30px;
+  }
+  .container1{
+    width: 100%;
+    padding: 35px 16px;
+  }
+}
+
+/* FIX GAP BETWEEN SKILLS & CONTACT */
+/* Remove empty portfolio spacer */
+.main-text{
+  margin-top: 1 !important;
+  padding-top: 0 !important;
+  height: 0;
+}
+
+/* Reduce bottom space after skills/projects */
+.services{
+  margin-bottom: 0 !important;
+}
+
+/* Remove extra space under skill containers */
+.container1{
+  margin-bottom: 0;
+}
+
+/* Pull Contact section upward */
+.contact{
+  margin-top: -40px;
+}
+
+/* Remove default section spacing */
+section{
+  margin-bottom: 0;
 }
